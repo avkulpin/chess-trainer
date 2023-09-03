@@ -1,0 +1,6 @@
+{
+  "cache": {
+    "key": "CHESS_TRAINER_CACHE",
+    "ttl": 200000
+  }
+}

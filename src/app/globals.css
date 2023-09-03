@@ -9,6 +9,25 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
+  --border-line-color: #0071ff33;
+  --background-basic-color: #131313;
+  --background-panel-color: #1c1c1c;
+  --background-panel-header-color: #212121;
+  --font-primary-color: #f6f8fa;
+  --font-secondary-color: #b8b8b8;
+  --font-bleak-color: #4a4a4a;
+  --highlight-color: #54d6ff33;
+
+  --border-radius-sm: 8px;
+
+  --button-size-small: 24px;
+  --button-size-medium: 32px;
+
+  --button-variant-secondary-bg-color: #599a11;
+  --button-variant-secondary-border-color: #6eac29;
+  --button-variant-secondary-bg-color-hover: #498a11;
+  --button-variant-secondary-border-color-hover: #80c633;
+
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,
     #16abff33 0deg,
@@ -87,12 +106,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: var(--background-basic-color);
 }
 
 a {
