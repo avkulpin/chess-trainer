@@ -2,6 +2,7 @@
 import './styles/base.css';
 import './styles/theme.css';
 import React, { useEffect, useLayoutEffect, useRef, useMemo } from 'react';
+import { useWindowSize } from 'react-use';
 import { Chessground } from 'chessground';
 import { calculateMovable } from './utils';
 
@@ -17,20 +18,13 @@ const baseDrawableOptions = {
   prevSvgHash: '',
 };
 
-export const ChessDisplay = ({
-  game,
-  fen,
-  width,
-  height,
-  drawable,
-  lastMove,
-  onMove,
-}) => {
+export const ChessDisplay = ({ game, fen, drawable, lastMove, onMove }) => {
+  const { width, height } = useWindowSize();
   const events = useMemo(() => ({ move: onMove }), [onMove]);
   const styles = useMemo(
     () => ({
-      width,
-      height,
+      width: `${Math.min(width, height) - 40}px`,
+      height: `${Math.min(width, height) - 40}px`,
     }),
     [width, height],
   );
@@ -41,14 +35,13 @@ export const ChessDisplay = ({
   useLayoutEffect(() => {
     if (element.current) {
       chessGround.current = Chessground(element.current, {
-        width,
-        height,
         fen,
+        resizable: true,
         movable,
         events,
         lastMove,
         animation: {
-          duration: 300,
+          duration: 200,
         },
         drawable: {
           ...baseDrawableOptions,
@@ -61,6 +54,8 @@ export const ChessDisplay = ({
   useEffect(() => {
     chessGround?.current?.set({
       fen,
+      width: Math.min(width, height),
+      height: Math.min(width, height),
       movable,
       events,
       drawable: {
@@ -68,7 +63,7 @@ export const ChessDisplay = ({
         ...drawable,
       },
     });
-  }, [drawable, fen, events]);
+  }, [drawable, fen, events, height, width]);
 
   return <div ref={element} style={styles} />;
 };

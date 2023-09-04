@@ -3,6 +3,7 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { shallow } from 'zustand/shallow';
 import { produce } from 'immer';
 import { gameStore } from './game';
+import { isNil } from '../utils/misc';
 
 export const timeMachineStore = create(
   subscribeWithSelector((set, get) => ({
@@ -12,7 +13,7 @@ export const timeMachineStore = create(
     travelTo(index) {
       const pgn = get().timeline[index];
 
-      if (pgn) {
+      if (!isNil(pgn)) {
         set({
           cursor: pgn,
           cursorIndex: index,

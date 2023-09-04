@@ -4,15 +4,19 @@ import { Typography } from '../Typography/Typography';
 import { modalPopup, modalPopout } from '../styles/keyframes/ModalPopup';
 
 export const Tooltip = forwardRef(
-  ({ label, delay = 400, top, children, ...props }, ref) => {
+  ({ label, delay = 400, top, children, disabled, ...props }, ref) => {
     const timeoutRef = useRef(null);
     const [visible, setVisible] = useState(false);
 
     const handleShow = useCallback(() => {
+      if (disabled) {
+        return;
+      }
+
       timeoutRef.current = setTimeout(() => {
         setVisible(true);
       }, delay);
-    }, [label, delay]);
+    }, [label, delay, disabled]);
 
     const handleHide = useCallback(() => {
       clearInterval(timeoutRef.current);

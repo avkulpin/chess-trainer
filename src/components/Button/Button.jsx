@@ -168,13 +168,14 @@ const Root = styled.div`
     disabled &&
     [
       ButtonVariant.PRIMARY,
-      ButtonVariant.PRIMARY,
+      ButtonVariant.SECONDARY,
       ButtonVariant.WARNING,
     ].includes(variant) &&
     css`
       ${ButtonRoot} {
-        background-color: var(--background-200) !important;
-        border: 1px solid var(--background-200) !important;
+        background-color: var(--background-color-disabled) !important;
+        border: 1px solid var(--background-color-disabled) !important;
+        opacity: 0.5;
       }
     `}
 

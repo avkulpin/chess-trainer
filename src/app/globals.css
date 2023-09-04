@@ -8,6 +8,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --background-color-disabled: #333;
 
   --border-line-color: #0071ff33;
   --background-basic-color: #131313;
@@ -18,7 +19,7 @@
   --font-bleak-color: #4a4a4a;
   --highlight-color: #54d6ff33;
 
-  --border-radius-sm: 8px;
+  --border-radius-sm: 5px;
 
   --button-size-small: 24px;
   --button-size-medium: 32px;

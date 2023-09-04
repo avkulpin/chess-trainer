@@ -1,13 +1,12 @@
 'use client';
 import { useCallback, useState } from 'react';
-import styled from 'styled-components';
 import { ChessDisplay } from './ChessDisplay';
 import { useMovesExplorer } from '../../queries/useMovesExplorer';
-import { useKeyInput } from '../../hooks/useKeyInput';
-import { mapMovesToAutoShapes } from './utils';
 import { useTimeMachineStore } from '../../store/timeMachine';
 import { useGameStore } from '../../store/game';
 import { usePastVersionGame } from './hooks/usePastVersionGame';
+import { useKeyInput } from '../../hooks/useKeyInput';
+import { mapMovesToAutoShapes } from './utils';
 
 export const ChessBoard = () => {
   const game = useGameStore((state) => state.game);
@@ -21,7 +20,6 @@ export const ChessBoard = () => {
   );
   const travelBack = useTimeMachineStore((state) => state.travelBack);
   const travelNext = useTimeMachineStore((state) => state.travelForward);
-  const resetTimeMachine = useTimeMachineStore((state) => state.reset);
   const pastVersionGame = usePastVersionGame();
   const [drawable, setDrawable] = useState({});
 
@@ -58,22 +56,14 @@ export const ChessBoard = () => {
   );
 
   return (
-    <Root>
-      <ChessDisplay
-        fen={fen}
-        game={mainGame}
-        width="600px"
-        height="600px"
-        lastMove={lastMove}
-        drawable={drawable}
-        onMove={handleMove}
-      />
-    </Root>
+    <ChessDisplay
+      fen={fen}
+      game={mainGame}
+      width="600px"
+      height="600px"
+      lastMove={lastMove}
+      drawable={drawable}
+      onMove={handleMove}
+    />
   );
 };
-
-const Root = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;

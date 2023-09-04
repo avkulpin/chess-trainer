@@ -13,11 +13,11 @@ import { useVariationStore } from '../../store/variation';
 export const ChessTimeline = () => {
   const openingName = useRef();
   const fen = useGameStore((state) => state.fen);
-  const timeline = useTimeMachineStore((state) => state.timeline);
+  const history = useGameStore((state) => state.history);
 
   useMovesExplorer(fen, {
     onSuccess: (data) => {
-      openingName.current = timeline.length
+      openingName.current = history.length
         ? data?.opening?.name || openingName.current
         : data?.opening?.name;
     },
@@ -30,9 +30,9 @@ export const ChessTimeline = () => {
         <SavedFolder />
       </Header>
       <Body>
-        {!timeline.length && (
+        {!history.length && (
           <GameNotationOverlay>
-            <GameNotation size={13}>Variation Notation</GameNotation>
+            <GameNotation size={14}>Variation Notation</GameNotation>
           </GameNotationOverlay>
         )}
         <MovesNotation />
@@ -47,6 +47,8 @@ const MovesNotation = () => {
   const cursorIndex = useTimeMachineStore((state) => state.cursorIndex);
   const travelTo = useTimeMachineStore((state) => state.travelTo);
   const save = useVariationStore((state) => state.saveVariation);
+
+  const { data: explorerMoves } = useMovesExplorer(game.fen());
 
   if (!history.length) {
     return null;
@@ -72,7 +74,13 @@ const MovesNotation = () => {
       <Tooltip
         label="Save variation"
         delay={150}
-        onClick={() => save(game.fen())}
+        onClick={() =>
+          save({
+            fen: game.fen(),
+            pgn: game.history().join('\n'),
+            name: explorerMoves?.opening?.name,
+          })
+        }
       >
         <IconButton src="/icons/save.svg" variant={ButtonVariant.SECONDARY} />
       </Tooltip>
@@ -85,8 +93,7 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 400px;
-  max-width: 380px;
+  height: 100%;
   border-radius: 8px;
   background-color: var(--background-panel-color);
 `;

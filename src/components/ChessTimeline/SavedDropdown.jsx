@@ -63,7 +63,10 @@ export const SavedDropdown = ({ parentRef, open, onClose }) => {
           }}
         >
           <LabelWrap>
-            <Typography size={12}>{variation}</Typography>
+            <Typography size={12}>{variation.name}</Typography>
+          </LabelWrap>
+          <LabelWrap>
+            <Typography size={12}>{variation.pgn}</Typography>
           </LabelWrap>
           {/*<Board>*/}
           {/*  <ChessDisplay*/}
@@ -135,7 +138,7 @@ const DropdownRoot = styled.div`
   top: 65px;
   background-color: var(--background-panel-color);
   border: 1px solid var(--font-bleak-color);
-  width: fit-content;
+  width: 500px;
   border-radius: 16px;
   padding: 24px;
 
@@ -151,24 +154,14 @@ const DropdownRoot = styled.div`
 
 const VariationButton = styled.div`
   display: flex;
+  width: 100%;
   align-items: center;
-  gap: 8px;
-  padding: 8px;
-  cursor: pointer;
-  border: var(--border-radius-sm);
-  transition: 200ms ease background-color;
-  will-change: background-color;
-  text-wrap: normal;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
+  justify-content: space-between;
 `;
 
 const LabelWrap = styled.div`
   display: flex;
   overflow-x: hidden;
-  max-width: 100px;
 `;
 
 const Board = styled.div`
