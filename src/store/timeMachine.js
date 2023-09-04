@@ -7,6 +7,7 @@ import { gameStore } from './game';
 export const timeMachineStore = create(
   subscribeWithSelector((set, get) => ({
     cursor: null,
+    cursorIndex: null,
     timeline: [],
     travelTo(index) {
       const pgn = get().timeline[index];
@@ -14,6 +15,7 @@ export const timeMachineStore = create(
       if (pgn) {
         set({
           cursor: pgn,
+          cursorIndex: index,
         });
       }
     },
@@ -28,6 +30,7 @@ export const timeMachineStore = create(
       if (cursor === null) {
         set({
           cursor: timeline[timeline.length - 2],
+          cursorIndex: timeline.length - 2,
         });
       } else {
         const index = timeline.findIndex((milestone) => milestone === cursor);
@@ -35,6 +38,7 @@ export const timeMachineStore = create(
         if (index > 0) {
           set({
             cursor: timeline[index - 1],
+            cursorIndex: index - 1,
           });
         }
       }
@@ -51,16 +55,19 @@ export const timeMachineStore = create(
       if (index === timeline.length - 2) {
         set({
           cursor: null,
+          cursorIndex: null,
         });
       } else {
         set({
           cursor: timeline[index + 1],
+          cursorIndex: index + 1,
         });
       }
     },
     reset() {
       set({
         cursor: null,
+        cursorIndex: null,
         timeline: [],
       });
     },
@@ -84,6 +91,7 @@ gameStore.subscribe(
 
     timeMachineStore.setState({
       cursor: null,
+      cursorIndex: null,
       timeline: ['', ...timeline],
     });
   },
@@ -97,6 +105,7 @@ gameStore.subscribe(
 
     timeMachineStore.setState({
       cursor: null,
+      cursorIndex: null,
       timeline: produce(timeline, (draft) => void draft.push(pgn)),
     });
   },

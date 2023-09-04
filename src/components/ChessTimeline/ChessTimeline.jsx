@@ -15,13 +15,13 @@ export const ChessTimeline = () => {
   const fen = useGameStore((state) => state.fen);
   const timeline = useTimeMachineStore((state) => state.timeline);
 
-  // useMovesExplorer(fen, {
-  //   onSuccess: (data) => {
-  //     openingName.current = timeline.length
-  //       ? data?.opening?.name || openingName.current
-  //       : data?.opening?.name;
-  //   },
-  // });
+  useMovesExplorer(fen, {
+    onSuccess: (data) => {
+      openingName.current = timeline.length
+        ? data?.opening?.name || openingName.current
+        : data?.opening?.name;
+    },
+  });
 
   return (
     <Root>
@@ -44,8 +44,8 @@ export const ChessTimeline = () => {
 const MovesNotation = () => {
   const game = useGameStore((state) => state.game);
   const history = useGameStore((state) => state.history);
-  const cursor = useTimeMachineStore((state) => state.cursor);
-  const moveTo = useTimeMachineStore((state) => state.travelTo);
+  const cursorIndex = useTimeMachineStore((state) => state.cursorIndex);
+  const travelTo = useTimeMachineStore((state) => state.travelTo);
   const save = useVariationStore((state) => state.saveVariation);
 
   if (!history.length) {
@@ -57,8 +57,12 @@ const MovesNotation = () => {
       {history.map((item, index) => (
         <Notation
           key={`${item}:${index}`}
-          selected={cursor === item}
-          onClick={() => moveTo(item)}
+          selected={
+            cursorIndex !== null
+              ? cursorIndex === index + 1
+              : history.length === index + 1
+          }
+          onClick={() => travelTo(index + 1)}
         >
           <Typography size={14}>
             <MoveIndex>{index + 1}.</MoveIndex> {item}
