@@ -61,4 +61,10 @@ export const mapMovesToAutoShapes = (moves) =>
     };
   });
 
+export const parseExplorerMoves = (moves) =>
+  moves.map((move) => ({
+    from: move?.uci?.slice?.(0, 2),
+    to: move?.uci?.slice?.(2),
+  }));
+
 export const getBrushByLevel = (level) => levelBrushMap[level];

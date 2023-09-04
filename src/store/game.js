@@ -80,37 +80,4 @@ export const gameStore = create(
   })),
 );
 
-// gameStore.subscribe(
-//   (state) => state.lastMove,
-//   (lastMove) => {
-//     const history = historyStore.getState().history;
-//     // game.history().join('\n') - get pgn
-//
-//     if (lastMove) {
-//       const foundIndex = history.findIndex((item) => item === lastMove);
-//
-//       const newHistory =
-//         foundIndex > -1
-//           ? [...history.slice(0, foundIndex), lastMove]
-//           : [...history, lastMove];
-//
-//       historyStore.setState({
-//         history: newHistory,
-//         cursor: lastMove,
-//       });
-//     } else {
-//       game.reset();
-//
-//       historyStore.setState({
-//         cursor: null,
-//       });
-//
-//       gameStore.setState({
-//         fen: game.fen(),
-//       });
-//     }
-//   },
-//   { fireImmediately: false },
-// );
-
 export const useGameStore = (selector) => gameStore(selector, shallow);

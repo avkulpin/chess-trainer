@@ -19,12 +19,13 @@ export const Tooltip = forwardRef(
     }, [label, delay, disabled]);
 
     const handleHide = useCallback(() => {
-      clearInterval(timeoutRef.current);
+      clearTimeout(timeoutRef.current);
       setVisible(false);
     }, [label, delay]);
 
     return (
       <Root
+        key={label}
         onMouseEnter={handleShow}
         onMouseLeave={handleHide}
         {...props}
@@ -32,7 +33,7 @@ export const Tooltip = forwardRef(
       >
         {children}
         {visible && (
-          <Info open={visible} top={top}>
+          <Info open={visible} top={top} label>
             <Label size={14}>{label}</Label>
             <TipRoot>
               <Tip />

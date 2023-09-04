@@ -21,3 +21,5 @@ export const omit = (value, keys) => {
 };
 
 export const isNil = (value) => value === null || typeof value === 'undefined';
+export const getRandomFromArray = (array) =>
+  array[Math.floor(Math.random() * array.length)];

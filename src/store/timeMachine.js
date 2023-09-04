@@ -113,32 +113,5 @@ gameStore.subscribe(
   { fireImmediately: true },
 );
 
-// historyStore.subscribe(
-//   (state) => state.cursor,
-//   (cursor) => {
-//     const history = historyStore.getState().history;
-//
-//     if (!cursor) {
-//       game.reset();
-//
-//       gameStore.setState({
-//         fen: game.fen(),
-//       });
-//
-//       return;
-//     }
-//
-//     const move = history.find((item) => item === cursor);
-//
-//     if (move) {
-//       game.load(move.after);
-//       gameStore.setState({
-//         fen: game.fen(),
-//       });
-//     }
-//   },
-//   { fireImmediately: false },
-// );
-
 export const useTimeMachineStore = (selector) =>
   timeMachineStore(selector, shallow);

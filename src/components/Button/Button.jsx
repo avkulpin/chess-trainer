@@ -109,7 +109,7 @@ const ButtonRoot = styled.button`
   ${({ variant }) =>
     variant === ButtonVariant.WARNING &&
     css`
-      background-color: var(--button-variant-warning-background-color);
+      background-color: var(--button-variant-warning-bg-color);
       border: 1px solid var(--button-variant-warning-border-color);
       box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.25) inset;
 
@@ -118,7 +118,7 @@ const ButtonRoot = styled.button`
       }
 
       &:hover {
-        background-color: var(--button-variant-warning-background-color-hover);
+        background-color: var(--button-variant-warning-bg-color-hover);
         border: 1px solid var(--button-variant-warning-border-color-hover);
         box-shadow: none;
       }

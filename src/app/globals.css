@@ -29,6 +29,11 @@
   --button-variant-secondary-bg-color-hover: #498a11;
   --button-variant-secondary-border-color-hover: #80c633;
 
+  --button-variant-warning-bg-color: #ac0f0f;
+  --button-variant-warning-border-color: #ac0f0f;
+  --button-variant-warning-bg-color-hover: #970d0d;
+  --button-variant-warning-border-color-hover: #cf1b1b;
+
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,
     #16abff33 0deg,
