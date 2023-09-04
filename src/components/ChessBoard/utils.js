@@ -28,11 +28,11 @@ const orientationMap = {
   black: 'b',
 };
 
-export const calculateMovable = (chess) => {
+export const calculateMovable = (game) => {
   const dests = new Map();
 
   SQUARES.forEach((s) => {
-    const ms = chess.moves({ square: s, verbose: true });
+    const ms = game.moves({ square: s, verbose: true });
     if (ms.length) {
       dests.set(
         s,
@@ -54,9 +54,9 @@ export const mapMovesToAutoShapes = (moves) =>
     return {
       orig: move?.uci?.slice?.(0, 2),
       dest: move?.uci?.slice?.(2),
-      brush: levelBrushMap[index].color,
+      brush: brush.color,
       modifiers: {
-        lineWidth: levelBrushMap[index].lineWidth,
+        lineWidth: brush.lineWidth,
       },
     };
   });

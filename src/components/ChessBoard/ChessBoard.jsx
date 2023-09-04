@@ -1,50 +1,45 @@
 'use client';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ChessDisplay } from './ChessDisplay';
 import { useMovesExplorer } from '../../queries/useMovesExplorer';
 import { useKeyInput } from '../../hooks/useKeyInput';
-import { calculateMovable, mapMovesToAutoShapes } from './utils';
-import { useHistoryStore } from '../../store/history';
+import { mapMovesToAutoShapes } from './utils';
+import { useTimeMachineStore } from '../../store/timeMachine';
 import { useGameStore } from '../../store/game';
+import { usePastVersionGame } from './hooks/usePastVersionGame';
 
 export const ChessBoard = () => {
   const game = useGameStore((state) => state.game);
-  const fen = useGameStore((state) => state.fen);
-  const lastMove = useGameStore((state) => state.lastMove);
-  const redraw = useGameStore((state) => state.redraw);
-  const drawable = useGameStore((state) => state.drawable);
-  const updateLastMove = useGameStore((state) => state.updateLastMove);
-  const forceUpdate = useGameStore((state) => state.forceUpdate);
-  const backHistory = useHistoryStore((state) => state.back);
-  const nextHistory = useHistoryStore((state) => state.next);
-  const deleteHistory = useHistoryStore((state) => state.delete);
+  const mainFen = useGameStore((state) => state.fen);
+  const move = useGameStore((state) => state.move);
+  const undo = useGameStore((state) => state.undo);
+  const reset = useGameStore((state) => state.reset);
+  const load = useGameStore((state) => state.load);
+  const lastMove = useGameStore(
+    ({ currentMove }) => currentMove && [currentMove?.from, currentMove?.to],
+  );
+  const travelBack = useTimeMachineStore((state) => state.travelBack);
+  const travelNext = useTimeMachineStore((state) => state.travelForward);
+  const resetTimeMachine = useTimeMachineStore((state) => state.reset);
+  const pastVersionGame = usePastVersionGame();
+  const [drawable, setDrawable] = useState({});
 
-  useHistoryStore((state) => state.cursor); /* To trigger redraw hack */
+  // useHistoryStore((state) => state.cursor); /* To trigger redraw hack */
 
   useKeyInput([
-    [
-      'Escape',
-      () => {
-        game.reset();
-        updateLastMove(null);
-        forceUpdate();
-      },
-    ],
-    ['ArrowLeft', () => backHistory()],
-    ['ArrowRight', () => nextHistory()],
-    [
-      'Backspace',
-      () => {
-        deleteHistory();
-        forceUpdate();
-      },
-    ],
+    ['Escape', () => void reset()],
+    ['ArrowLeft', () => travelBack()],
+    ['ArrowRight', () => travelNext()],
+    ['Backspace', () => void undo()],
   ]);
+
+  const mainGame = pastVersionGame || game;
+  const fen = pastVersionGame?.fen?.() || mainFen;
 
   useMovesExplorer(fen, {
     onSuccess: ({ moves }) => {
-      redraw({
+      setDrawable({
         autoShapes: mapMovesToAutoShapes(moves.slice(0, 5)),
       });
     },
@@ -52,25 +47,26 @@ export const ChessBoard = () => {
 
   const handleMove = useCallback(
     (from, to) => {
-      const move = game.move({ from, to });
-
-      if (move) {
-        updateLastMove(move);
+      if (pastVersionGame) {
+        pastVersionGame.move({ from, to });
+        load(pastVersionGame.history().join('\n'), true);
+      } else {
+        move(from, to);
       }
     },
-    [updateLastMove],
+    [pastVersionGame, game],
   );
 
   return (
     <Root>
       <ChessDisplay
+        fen={fen}
+        game={mainGame}
         width="600px"
         height="600px"
-        fen={fen}
-        lastMove={lastMove ? [lastMove.from, lastMove.to] : null}
-        movable={calculateMovable(game)}
-        onMove={handleMove}
+        lastMove={lastMove}
         drawable={drawable}
+        onMove={handleMove}
       />
     </Root>
   );

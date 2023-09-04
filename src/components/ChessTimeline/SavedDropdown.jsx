@@ -65,14 +65,14 @@ export const SavedDropdown = ({ parentRef, open, onClose }) => {
           <LabelWrap>
             <Typography size={12}>{variation}</Typography>
           </LabelWrap>
-          <Board>
-            <ChessDisplay
-              width="110px"
-              height="110px"
-              fen={variation}
-              coordinates={false}
-            />
-          </Board>
+          {/*<Board>*/}
+          {/*  <ChessDisplay*/}
+          {/*    width="110px"*/}
+          {/*    height="110px"*/}
+          {/*    fen={variation}*/}
+          {/*    coordinates={false}*/}
+          {/*  />*/}
+          {/*</Board>*/}
           <BinButton
             onClick={() => {
               deleteVariation(variation);

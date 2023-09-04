@@ -19,3 +19,5 @@ export const omit = (value, keys) => {
 
   return clone;
 };
+
+export const isNil = (value) => value === null || typeof value === 'undefined';

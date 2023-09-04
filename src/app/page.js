@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChessBoard } from '../components/ChessBoard/ChessBoard';
-import { ChessHistory } from '../components/ChessHistory/ChessHistory';
+import { ChessTimeline } from '../components/ChessTimeline/ChessTimeline';
 
 const queryClient = new QueryClient();
 
@@ -11,7 +11,7 @@ export default function Home() {
     <QueryClientProvider client={queryClient}>
       <Root>
         <ChessBoard />
-        <ChessHistory />
+        <ChessTimeline />
       </Root>
     </QueryClientProvider>
   );

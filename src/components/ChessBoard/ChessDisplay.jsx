@@ -1,8 +1,9 @@
 'use client';
-import './base.css';
-import './theme.css';
+import './styles/base.css';
+import './styles/theme.css';
 import React, { useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import { Chessground } from 'chessground';
+import { calculateMovable } from './utils';
 
 const baseDrawableOptions = {
   autoShapes: [],
@@ -16,24 +17,42 @@ const baseDrawableOptions = {
   prevSvgHash: '',
 };
 
-export const ChessDisplay = (props) => {
-  const events = useMemo(() => ({ move: props.onMove }), []);
+export const ChessDisplay = ({
+  game,
+  fen,
+  width,
+  height,
+  drawable,
+  lastMove,
+  onMove,
+}) => {
+  const events = useMemo(() => ({ move: onMove }), [onMove]);
+  const styles = useMemo(
+    () => ({
+      width,
+      height,
+    }),
+    [width, height],
+  );
   const chessGround = useRef();
   const element = useRef();
-
-  const { style, width, height } = props;
+  const movable = useMemo(() => calculateMovable(game), [fen, game]);
 
   useLayoutEffect(() => {
     if (element.current) {
       chessGround.current = Chessground(element.current, {
-        ...props,
+        width,
+        height,
+        fen,
+        movable,
         events,
+        lastMove,
         animation: {
           duration: 300,
         },
         drawable: {
           ...baseDrawableOptions,
-          ...props.drawable,
+          ...drawable,
         },
       });
     }
@@ -41,22 +60,15 @@ export const ChessDisplay = (props) => {
 
   useEffect(() => {
     chessGround?.current?.set({
-      ...props,
+      fen,
+      movable,
+      events,
       drawable: {
         ...baseDrawableOptions,
-        ...props.drawable,
+        ...drawable,
       },
     });
-  }, [props]);
+  }, [drawable, fen, events]);
 
-  const styleProps = { style: { ...style } };
-  if (width) {
-    styleProps.style.width = props.width;
-  }
-
-  if (height) {
-    styleProps.style.height = props.height;
-  }
-
-  return <div ref={element} style={styleProps.style} />;
+  return <div ref={element} style={styles} />;
 };

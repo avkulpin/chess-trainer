@@ -5,23 +5,23 @@ import { ButtonVariant } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { SavedFolder } from './DynamicSaveDropdown';
-import { useHistoryStore } from '../../store/history';
+import { useTimeMachineStore } from '../../store/timeMachine';
 import { useMovesExplorer } from '../../queries/useMovesExplorer';
 import { useGameStore } from '../../store/game';
 import { useVariationStore } from '../../store/variation';
 
-export const ChessHistory = () => {
+export const ChessTimeline = () => {
   const openingName = useRef();
   const fen = useGameStore((state) => state.fen);
-  const history = useHistoryStore((state) => state.history);
+  const timeline = useTimeMachineStore((state) => state.timeline);
 
-  useMovesExplorer(fen, {
-    onSuccess: (data) => {
-      openingName.current = history.length
-        ? data?.opening?.name || openingName.current
-        : data?.opening?.name;
-    },
-  });
+  // useMovesExplorer(fen, {
+  //   onSuccess: (data) => {
+  //     openingName.current = timeline.length
+  //       ? data?.opening?.name || openingName.current
+  //       : data?.opening?.name;
+  //   },
+  // });
 
   return (
     <Root>
@@ -30,7 +30,7 @@ export const ChessHistory = () => {
         <SavedFolder />
       </Header>
       <Body>
-        {!history.length && (
+        {!timeline.length && (
           <GameNotationOverlay>
             <GameNotation size={13}>Variation Notation</GameNotation>
           </GameNotationOverlay>
@@ -43,9 +43,9 @@ export const ChessHistory = () => {
 
 const MovesNotation = () => {
   const game = useGameStore((state) => state.game);
-  const history = useHistoryStore((state) => state.history);
-  const cursor = useHistoryStore((state) => state.cursor);
-  const moveTo = useHistoryStore((state) => state.moveTo);
+  const history = useGameStore((state) => state.history);
+  const cursor = useTimeMachineStore((state) => state.cursor);
+  const moveTo = useTimeMachineStore((state) => state.travelTo);
   const save = useVariationStore((state) => state.saveVariation);
 
   if (!history.length) {
@@ -56,12 +56,12 @@ const MovesNotation = () => {
     <MoveNotationRoot>
       {history.map((item, index) => (
         <Notation
-          key={`${item.before}:${item.after}`}
+          key={`${item}:${index}`}
           selected={cursor === item}
           onClick={() => moveTo(item)}
         >
           <Typography size={14}>
-            <MoveIndex>{index + 1}.</MoveIndex> {item.to}
+            <MoveIndex>{index + 1}.</MoveIndex> {item}
           </Typography>
         </Notation>
       ))}
