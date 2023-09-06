@@ -12,13 +12,13 @@ export default function Home() {
   return (
     <QueryClientProvider client={queryClient}>
       <Root>
-        <MainBoard>
-          <ChessBoard />
-        </MainBoard>
+        <ChessBoard />
         <SidePanel>
-          <ChessTimeline />
-          <BoardControls />
-          <PracticeMenu />
+          <SidePanelInner>
+            <ChessTimeline />
+            <BoardControls />
+            <PracticeMenu />
+          </SidePanelInner>
         </SidePanel>
       </Root>
     </QueryClientProvider>
@@ -29,25 +29,27 @@ const Root = styled.div`
   display: flex;
   padding: 20px;
   gap: 20px;
-  width: 100vw;
-  height: 100vh;
   align-items: start;
   justify-content: center;
-`;
 
-const MainBoard = styled.div`
-  display: flex;
-  height: 100%;
+  @media (max-width: 970px) {
+    flex-direction: column;
+  }
 `;
 
 const SidePanel = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 25%;
-  gap: 10px;
 
-  &:first-child {
-    flex-grow: 1;
+  @media (max-width: 970px) {
+    width: 100%;
   }
+`;
+
+const SidePanelInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
 `;

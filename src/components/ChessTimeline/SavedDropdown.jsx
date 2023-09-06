@@ -57,6 +57,7 @@ export const SavedDropdown = ({ parentRef, open, onClose }) => {
     >
       {variations?.map?.((variation) => (
         <VariationButton
+          key={variation.pgn}
           onClick={() => {
             load(variation);
             onClose();

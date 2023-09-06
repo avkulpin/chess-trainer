@@ -25,16 +25,9 @@ export const ChessDisplay = ({
   drawable,
   lastMove,
   onMove,
+  styles,
 }) => {
-  const { width, height } = useWindowSize();
   const events = useMemo(() => ({ move: onMove }), [onMove]);
-  const styles = useMemo(
-    () => ({
-      width: `${Math.min(width, height) - 40}px`,
-      height: `${Math.min(width, height) - 40}px`,
-    }),
-    [width, height],
-  );
   const chessGround = useRef();
   const element = useRef();
   const movable = useMemo(() => calculateMovable(game), [fen, game]);
@@ -61,8 +54,8 @@ export const ChessDisplay = ({
   useEffect(() => {
     chessGround?.current?.set({
       fen,
-      width: Math.min(width, height),
-      height: Math.min(width, height),
+      width: styles.width,
+      height: styles.height,
       movable,
       events,
       drawable: {
@@ -70,7 +63,7 @@ export const ChessDisplay = ({
         ...drawable,
       },
     });
-  }, [drawable, fen, events, height, width]);
+  }, [drawable, fen, events, styles]);
 
   useEffect(() => {
     if (chessGround?.current?.state?.orientation !== orientation) {

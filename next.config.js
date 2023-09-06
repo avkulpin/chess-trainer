@@ -7,6 +7,37 @@ const nextConfig = {
       displayName: true,
     },
   },
+  async headers() {
+    return [
+      {
+        source: '/',
+        headers: [
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+        ],
+      },
+      {
+        source:
+          '/stockfish/v15/(stockfish.js|stockfish.wasm|stockfish.worker.js)',
+        headers: [
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'same-origin',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 /* // https://github.com/vercel/next.js/issues/44062#issuecomment-1445185361 */

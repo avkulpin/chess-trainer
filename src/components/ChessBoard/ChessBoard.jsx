@@ -1,5 +1,7 @@
 'use client';
 import { useCallback, useState, useEffect, useMemo } from 'react';
+import styled from 'styled-components';
+import { useWindowSize } from 'react-use';
 import { ChessDisplay } from './ChessDisplay';
 import { useMovesExplorer } from '../../queries/useMovesExplorer';
 import { useTimeMachineStore } from '../../store/timeMachine';
@@ -10,8 +12,10 @@ import { useKeyInput } from '../../hooks/useKeyInput';
 import { useStockfish } from '../../hooks/useStockfish';
 import { mapMovesToAutoShapes, parseExplorerMoves } from './utils';
 import { getRandomFromArray } from '../../utils/misc';
+import { useEngine } from '../../hooks/useEngine';
 
 export const ChessBoard = () => {
+  const { width, height } = useWindowSize();
   const game = useGameStore((state) => state.game);
   const orientation = useGameStore((state) => state.orientation);
   const practiceEnabled = usePracticeStore((state) => state.enabled);
@@ -30,6 +34,14 @@ export const ChessBoard = () => {
   const lastMove = useMemo(
     () => (currentMove ? [currentMove?.from, currentMove?.to] : null),
     [currentMove],
+  );
+
+  const styles = useMemo(
+    () => ({
+      width: `${Math.min(width, height) - 40}px`,
+      height: `${Math.min(width, height) - 40}px`,
+    }),
+    [width, height],
   );
 
   // useHistoryStore((state) => state.cursor); /* To trigger redraw hack */
@@ -65,29 +77,37 @@ export const ChessBoard = () => {
     [pastVersionGame, game],
   );
 
-  const { move: engineMove, findMove } = useStockfish({
-    duration: 10 * 1000 * 60,
-    increment: 2 * 1000,
-    skillLevel: 20,
-    filepath: 'stockfish/stockfish.js',
-  });
+  const { bestMove, evaluation, findBestMove } = useEngine();
+
+  // const { move: engineMove, findMove } = useStockfish({
+  //   duration: 10 * 1000 * 60,
+  //   increment: 2 * 1000,
+  //   skillLevel: 20,
+  //   filepath: 'stockfish/v15/stockfish.js',
+  // });
+
+  // useEffect(() => {
+  //   if (game.history().length === 1) {
+  //     debugger
+  //     evaluate({
+  //       history: game.history({ verbose: true }),
+  //       accelerate: false,
+  //     })
+  //   }
+  // }, [game])
 
   useEffect(() => {
     const botMove = orientation === 'white' ? 'b' : 'w';
 
-    if (practiceEnabled && game.turn() === botMove && engineMove) {
-      move(engineMove.from, engineMove.to);
+    if (practiceEnabled && game.turn() === botMove && bestMove) {
+      move(bestMove.from, bestMove.to);
     }
-  }, [engineMove, practiceEnabled, game, orientation]);
+  }, [bestMove, practiceEnabled, game, orientation]);
 
   useEffect(() => {
     const botMove = orientation === 'white' ? 'b' : 'w';
-
     if (practiceEnabled && game.turn() === botMove) {
-      findMove({
-        history: game.history({ verbose: true }),
-        accelerate: false,
-      });
+      findBestMove(game.history({ verbose: true }));
     }
   }, [practiceEnabled, currentMove, game, orientation]);
 
@@ -106,15 +126,22 @@ export const ChessBoard = () => {
   // }, [practiceEnabled, explorerMoves]);
 
   return (
-    <ChessDisplay
-      fen={fen}
-      game={mainGame}
-      orientation={orientation}
-      width="600px"
-      height="600px"
-      lastMove={lastMove}
-      drawable={drawable}
-      onMove={handleMove}
-    />
+    <Root {...styles}>
+      <ChessDisplay
+        fen={fen}
+        game={mainGame}
+        orientation={orientation}
+        lastMove={lastMove}
+        drawable={drawable}
+        onMove={handleMove}
+        styles={styles}
+      />
+    </Root>
   );
 };
+
+const Root = styled.div`
+  display: flex;
+  width: ${({ width }) => `${width}px`};
+  height: ${({ height }) => `${height}px`};
+`;

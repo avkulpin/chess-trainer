@@ -27,7 +27,9 @@ export const ChessTimeline = () => {
   return (
     <Root>
       <Header>
-        <Typography>{openingName.current}</Typography>
+        <Typography size={16} weight={200}>
+          {openingName.current}
+        </Typography>
         <SavedFolder />
       </Header>
       <Body>
@@ -62,6 +64,7 @@ const MovesNotation = () => {
     <MoveNotationRoot>
       {historyPairs.map(([itemA, itemB], index) => (
         <NotationLine
+          key={`${itemA}:${itemB}:${index}`}
           itemA={itemA}
           itemB={itemB}
           index={index + 1}
@@ -139,10 +142,9 @@ const Root = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
   border-radius: 8px;
   background-color: var(--background-panel-color);
+  flex-grow: 1;
 `;
 
 const Header = styled.div`
@@ -158,6 +160,8 @@ const Header = styled.div`
 
 const Body = styled.div`
   display: flex;
+  flex-grow: 1;
+  height: 100%;
   flex-wrap: wrap;
 `;
 
@@ -223,7 +227,7 @@ const NotationGridLine = styled.div`
   align-items: center;
   grid-template-columns: 10px 50px 50px;
   grid-column-gap: 15px;
-  height: 50px;
+  height: 40px;
   padding: 10px;
 `;
 

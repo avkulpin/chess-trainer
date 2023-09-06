@@ -21,7 +21,7 @@ export const useStockfish = ({
   duration,
   increment,
   skillLevel = 20,
-  filepath = 'stockfish.js',
+  filepath = 'v10.js',
 }) => {
   // Main engine that generates chess moves.
   const { setHandler: setEngineHandler, command: commandEngine } =
@@ -57,6 +57,7 @@ export const useStockfish = ({
       commandEngine(
         `setoption name Skill Level Probability value ${errorProbability}`,
       );
+      commandEngine(`setoption name MultiPV value 3`);
     },
     [commandEngine],
   );
@@ -92,10 +93,28 @@ export const useStockfish = ({
     [commandEngine, commandEvaler, depth, duration, increment, isRunning],
   );
 
+  const evaluate = useCallback(
+    ({ history }) => {
+      if (isRunning) {
+        return;
+      }
+      const moveString = formatMoveString(history);
+      setStatus(ChessEngineStatus.Running);
+
+      commandEngine(`position startpos moves ${moveString}`);
+      commandEvaler(`position startpos moves ${moveString}`);
+
+      commandEngine(`go`);
+    },
+    [commandEngine, commandEvaler, depth, duration, increment, isRunning],
+  );
+
   /** `onmessage` handler for the engine. */
   const handleEngineMessage = useCallback(
     (event) => {
       const line = typeof event === 'object' ? event.data : event;
+      console.log('_______');
+      console.log(line);
       // Ignore system messages.
       if (IS_SYSTEM_MESSAGE.test(line)) {
         return;
@@ -129,6 +148,8 @@ export const useStockfish = ({
   const handleEvalerMessage = useCallback((event) => {
     const line = typeof event === 'object' ? event.data : event;
     // Ignore system messages.
+    console.log('EVALUTE:', line);
+
     if (!IS_SYSTEM_MESSAGE.test(line)) {
       console.debug('evaler', line);
     }
@@ -180,7 +201,7 @@ export const useStockfish = ({
     };
   }, [commandEngine, commandEvaler]);
 
-  return { move, findMove, isReady, isRunning };
+  return { move, findMove, evaluate, isReady, isRunning };
 };
 
 // Various pattern of the engine's message
@@ -199,3 +220,8 @@ export const IS_SYSTEM_MESSAGE = /^(?:(?:uci|ready)ok$|option name)/;
 
 // The engine has found the best move.
 export const FOUND_BEST_MOVE = /^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/;
+
+export const FINAL_EVALUATION =
+  /^Final evaluation: ((?:\d{1}|\d{2}|\d{3}|\d{4}).\d{2})?/;
+
+export const VARIATION_INFO = /^info depth?/;

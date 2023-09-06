@@ -18,3 +18,15 @@ export const formatMoveString = (history) =>
       `${output} ${from}${to}${promotion ?? ''}`,
     '',
   );
+
+export const parseVariationMessage = (message) => {
+  const parsed = message.split(' ');
+  const cpKey = parsed.findIndex((item) => item === 'cp') + 1;
+  const variationKey = parsed.findIndex((item) => item === 'pv') + 1;
+
+  return {
+    depth: parseInt(parsed[2]),
+    cp: parseInt(parsed[cpKey]) / 100,
+    variation: parsed.slice(variationKey),
+  };
+};
