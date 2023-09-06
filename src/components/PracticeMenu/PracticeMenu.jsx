@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import styled from 'styled-components';
 import { IconButton } from '../Button/IconButton';
-import { RoundIconButton } from '../Button/RoundIconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { ButtonVariant } from '../Button/Button';
 import { useGameStore } from '../../store/game';
@@ -29,17 +28,18 @@ export const PracticeMenu = () => {
         <>
           <Tooltip label="Practice solo" delay={400} disabled={disabled}>
             <IconButton
-              disabled={disabled}
               src="/icons/run.svg"
+              disabled={disabled}
               variant={ButtonVariant.SECONDARY}
               onClick={startPractice}
             />
           </Tooltip>
           <Tooltip label="Practice against bot" delay={400} disabled={disabled}>
             <IconButton
-              disabled={disabled}
               src="/icons/robot.svg"
+              disabled={disabled}
               variant={ButtonVariant.SECONDARY}
+              onClick={startPractice}
             />
           </Tooltip>
         </>
@@ -57,9 +57,4 @@ const Root = styled.div`
   height: 100px;
   border-radius: var(--border-radius-sm);
   background-color: var(--background-panel-color);
-`;
-
-const ControlButton = styled(RoundIconButton)`
-  width: 40px;
-  height: 40px;
 `;

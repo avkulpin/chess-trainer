@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { shallow } from 'zustand/shallow';
+import { gameStore } from './game';
 
 export const practiceStore = create(
   subscribeWithSelector((set, get) => ({
@@ -17,6 +18,18 @@ export const practiceStore = create(
       });
     },
   })),
+);
+
+gameStore.subscribe(
+  (state) => state.history,
+  (history) => {
+    if (!history.length && practiceStore.getState().enabled) {
+      practiceStore.setState({
+        enabled: false,
+      });
+    }
+  },
+  { fireImmediately: false },
 );
 
 export const usePracticeStore = (selector) => practiceStore(selector, shallow);

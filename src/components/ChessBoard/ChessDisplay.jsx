@@ -18,7 +18,14 @@ const baseDrawableOptions = {
   prevSvgHash: '',
 };
 
-export const ChessDisplay = ({ game, fen, drawable, lastMove, onMove }) => {
+export const ChessDisplay = ({
+  game,
+  fen,
+  orientation,
+  drawable,
+  lastMove,
+  onMove,
+}) => {
   const { width, height } = useWindowSize();
   const events = useMemo(() => ({ move: onMove }), [onMove]);
   const styles = useMemo(
@@ -64,6 +71,12 @@ export const ChessDisplay = ({ game, fen, drawable, lastMove, onMove }) => {
       },
     });
   }, [drawable, fen, events, height, width]);
+
+  useEffect(() => {
+    if (chessGround?.current?.state?.orientation !== orientation) {
+      chessGround?.current.toggleOrientation();
+    }
+  }, [orientation]);
 
   return <div ref={element} style={styles} />;
 };

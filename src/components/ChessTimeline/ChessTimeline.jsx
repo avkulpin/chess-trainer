@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { Typography } from '../Typography/Typography';
 import { ButtonVariant } from '../Button/Button';
@@ -9,6 +9,7 @@ import { useTimeMachineStore } from '../../store/timeMachine';
 import { useMovesExplorer } from '../../queries/useMovesExplorer';
 import { useGameStore } from '../../store/game';
 import { useVariationStore } from '../../store/variation';
+import { toPairs } from '../../utils/misc';
 
 export const ChessTimeline = () => {
   const openingName = useRef();
@@ -47,6 +48,9 @@ const MovesNotation = () => {
   const cursorIndex = useTimeMachineStore((state) => state.cursorIndex);
   const travelTo = useTimeMachineStore((state) => state.travelTo);
   const save = useVariationStore((state) => state.saveVariation);
+  const historyPairs = useMemo(() => {
+    return toPairs(history);
+  }, [history]);
 
   const { data: explorerMoves } = useMovesExplorer(game.fen());
 
@@ -56,37 +60,80 @@ const MovesNotation = () => {
 
   return (
     <MoveNotationRoot>
-      {history.map((item, index) => (
-        <Notation
-          key={`${item}:${index}`}
-          selected={
+      {historyPairs.map(([itemA, itemB], index) => (
+        <NotationLine
+          itemA={itemA}
+          itemB={itemB}
+          index={index + 1}
+          isItemASelected={
             cursorIndex !== null
-              ? cursorIndex === index + 1
-              : history.length === index + 1
+              ? cursorIndex === index * 2 + 1
+              : history.length === index * 2 + 1
           }
-          onClick={() => travelTo(index + 1)}
-        >
-          <Typography size={14}>
-            <MoveIndex>{index + 1}.</MoveIndex> {item}
-          </Typography>
-        </Notation>
+          isItemBSelected={
+            cursorIndex !== null
+              ? cursorIndex === index * 2 + 2
+              : history.length === index * 2 + 2
+          }
+          onItemAClick={() => travelTo(index * 2 + 1)}
+          onItemBClick={() => travelTo(index * 2 + 2)}
+        />
       ))}
-      <Tooltip
-        label="Save variation"
-        delay={150}
-        onClick={() =>
-          save({
-            fen: game.fen(),
-            pgn: game.history().join('\n'),
-            name: explorerMoves?.opening?.name,
-          })
-        }
-      >
-        <IconButton src="/icons/save.svg" variant={ButtonVariant.SECONDARY} />
-      </Tooltip>
+      {/*<Tooltip*/}
+      {/*  label="Save variation"*/}
+      {/*  delay={150}*/}
+      {/*  onClick={() =>*/}
+      {/*    save({*/}
+      {/*      fen: game.fen(),*/}
+      {/*      pgn: game.history().join('\n'),*/}
+      {/*      name: explorerMoves?.opening?.name,*/}
+      {/*    })*/}
+      {/*  }*/}
+      {/*>*/}
+      {/*  <IconButton src="/icons/save.svg" variant={ButtonVariant.SECONDARY} />*/}
+      {/*</Tooltip>*/}
     </MoveNotationRoot>
   );
 };
+
+const NotationLine = ({
+  itemA,
+  itemB,
+  index,
+  isItemASelected,
+  isItemBSelected,
+  onItemAClick,
+  onItemBClick,
+}) => {
+  return (
+    <NotationGridLine>
+      <MoveNotationIndex>
+        <Typography size={14}>
+          <MoveIndex>{index}.</MoveIndex>
+        </Typography>
+      </MoveNotationIndex>
+      <MoveNotationIndex>
+        <Notation selected={isItemASelected} onClick={onItemAClick}>
+          <Typography size={14}>{itemA}</Typography>
+        </Notation>
+      </MoveNotationIndex>
+      {itemB && (
+        <MoveNotationIndex>
+          <Notation selected={isItemBSelected} onClick={onItemBClick}>
+            <Typography size={14}>{itemB}</Typography>
+          </Notation>
+        </MoveNotationIndex>
+      )}
+    </NotationGridLine>
+  );
+};
+
+const NotationLineRoot = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 20px;
+`;
 
 const Root = styled.div`
   position: relative;
@@ -102,7 +149,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 80px;
   border-radius: 8px 8px 0 0;
   border-bottom: 1px solid #333;
   padding: 10px;
@@ -112,15 +159,13 @@ const Header = styled.div`
 const Body = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding: 10px;
-  gap: 2px;
 `;
 
 const Notation = styled.div`
   cursor: pointer;
   height: fit-content;
   border-radius: 8px;
-  padding: 4px;
+  padding: 4px 8px;
   border: 1px solid transparent;
   background-color: transparent;
   transition: 200ms ease background-color;
@@ -165,7 +210,26 @@ const MoveIndex = styled.span`
 
 const MoveNotationRoot = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+
+  & > :nth-child(even) {
+    background-color: var(--background-light-panel-color) !important;
+  }
+`;
+
+const NotationGridLine = styled.div`
+  display: grid;
   align-items: center;
-  gap: 10px;
+  grid-template-columns: 10px 50px 50px;
+  grid-column-gap: 15px;
+  height: 50px;
+  padding: 10px;
+`;
+
+const MoveNotationIndex = styled.div`
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  height: 20px;
 `;

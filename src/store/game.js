@@ -43,6 +43,7 @@ export const gameStore = create(
   subscribeWithSelector((set, get) => ({
     ...initializeGame(),
     currentMove: null,
+    orientation: 'white',
     load(notation, isPGN = false) {
       set({
         ...initializeGame(notation, isPGN),
@@ -76,6 +77,11 @@ export const gameStore = create(
           currentMove: history[history.length - 1] || null,
         });
       }
+    },
+    toggleOrientation() {
+      set({
+        orientation: get().orientation === 'white' ? 'black' : 'white',
+      });
     },
   })),
 );
