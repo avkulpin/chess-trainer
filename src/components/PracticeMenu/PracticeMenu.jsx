@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IconButton } from '../Button/IconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { ButtonVariant } from '../Button/Button';
+import { useEngine } from '../../hooks/useEngine';
 import { useGameStore } from '../../store/game';
 import { usePracticeStore } from '../../store/practice';
+import { useEngineStore } from '../../store/engine';
+import { Counter } from './Counter';
 
 export const PracticeMenu = () => {
   const history = useGameStore((state) => state.history);
@@ -16,14 +19,17 @@ export const PracticeMenu = () => {
   return (
     <Root>
       {practiceEnabled ? (
-        <Tooltip label="Stop practice" delay={400} disabled={disabled}>
-          <IconButton
-            disabled={disabled}
-            src="/icons/controls/stop.svg"
-            variant={ButtonVariant.WARNING}
-            onClick={stopPractice}
-          />
-        </Tooltip>
+        <>
+          <Tooltip label="Stop practice" delay={400} disabled={disabled}>
+            <IconButton
+              disabled={disabled}
+              src="/icons/controls/stop.svg"
+              variant={ButtonVariant.WARNING}
+              onClick={stopPractice}
+            />
+          </Tooltip>
+          <EngineInfo />
+        </>
       ) : (
         <>
           <Tooltip label="Practice solo" delay={400} disabled={disabled}>
@@ -46,6 +52,12 @@ export const PracticeMenu = () => {
       )}
     </Root>
   );
+};
+
+const EngineInfo = () => {
+  const score = useEngineStore((state) => state.score);
+
+  return <Counter value={score} />;
 };
 
 const Root = styled.div`

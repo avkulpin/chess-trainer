@@ -38,15 +38,20 @@ const Root = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: var(--background-basic-color);
+  will-change: opacity, transform, filter;
 `;
 
 const Glow = keyframes`
   0% {
-    opacity: 1;
+    opacity: 0.2;
+    transform: translateY(15px);
+    filter: drop-shadow(0px 0px 30px rgba(255, 255, 255, 0.5));
   }
   
   100% {
-    opacity: 0.3;
+    opacity: 1;
+    filter: drop-shadow(0px 0px 20px rgba(255, 255, 255, 0.5));
+    transform: translateY(0);
   }
 `;
 
@@ -57,7 +62,8 @@ const LogoGroup = styled.div`
   cursor: progress;
 
   animation-name: ${Glow};
-  animation-duration: 600ms;
+  animation-duration: 700ms;
+  animation-timing-function: ease;
   animation-direction: alternate;
   animation-iteration-count: infinite;
 `;

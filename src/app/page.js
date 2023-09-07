@@ -5,6 +5,7 @@ import { Dynamic as ChessBoard } from '../components/ChessBoard/Dynamic';
 import { ChessTimeline } from '../components/ChessTimeline/ChessTimeline';
 import { BoardControls } from '../components/BoardControls/BoardControls';
 import { PracticeMenu } from '../components/PracticeMenu/PracticeMenu';
+import { Loading } from '../components/Loading/Loading';
 
 const queryClient = new QueryClient();
 
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <QueryClientProvider client={queryClient}>
       <Root>
+        <Loading />
         <ChessBoard />
         <SidePanel>
           <SidePanelInner>

@@ -224,4 +224,6 @@ export const FOUND_BEST_MOVE = /^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/;
 export const FINAL_EVALUATION =
   /^Final evaluation: ((?:\d{1}|\d{2}|\d{3}|\d{4}).\d{2})?/;
 
-export const VARIATION_INFO = /^info depth?/;
+export const INFO = /^info depth?/;
+
+export const CURRMOVENUMBER = /currmovenumber/;

@@ -23,10 +23,13 @@ export const parseVariationMessage = (message) => {
   const parsed = message.split(' ');
   const cpKey = parsed.findIndex((item) => item === 'cp') + 1;
   const variationKey = parsed.findIndex((item) => item === 'pv') + 1;
+  const multiPvKey = parsed.findIndex((item) => item === 'multipv') + 1;
 
   return {
     depth: parseInt(parsed[2]),
+    selDepth: parseInt(parsed[4]),
     cp: parseInt(parsed[cpKey]) / 100,
+    multiPv: parseInt(parsed[multiPvKey]),
     variation: parsed.slice(variationKey),
   };
 };

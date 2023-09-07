@@ -9,10 +9,9 @@ import { useGameStore } from '../../store/game';
 import { usePracticeStore } from '../../store/practice';
 import { usePastVersionGame } from './hooks/usePastVersionGame';
 import { useKeyInput } from '../../hooks/useKeyInput';
-import { useStockfish } from '../../hooks/useStockfish';
-import { mapMovesToAutoShapes, parseExplorerMoves } from './utils';
-import { getRandomFromArray } from '../../utils/misc';
 import { useEngine } from '../../hooks/useEngine';
+import { mapMovesToAutoShapes } from './utils';
+import { useEngineStore } from '../../store/engine';
 
 export const ChessBoard = () => {
   const { width, height } = useWindowSize();
@@ -43,8 +42,6 @@ export const ChessBoard = () => {
     }),
     [width, height],
   );
-
-  // useHistoryStore((state) => state.cursor); /* To trigger redraw hack */
 
   useKeyInput([
     ['Escape', () => void reset()],
@@ -77,53 +74,29 @@ export const ChessBoard = () => {
     [pastVersionGame, game],
   );
 
-  const { bestMove, evaluation, findBestMove } = useEngine();
-
-  // const { move: engineMove, findMove } = useStockfish({
-  //   duration: 10 * 1000 * 60,
-  //   increment: 2 * 1000,
-  //   skillLevel: 20,
-  //   filepath: 'stockfish/v15/stockfish.js',
-  // });
-
-  // useEffect(() => {
-  //   if (game.history().length === 1) {
-  //     debugger
-  //     evaluate({
-  //       history: game.history({ verbose: true }),
-  //       accelerate: false,
-  //     })
-  //   }
-  // }, [game])
+  const { evaluate } = useEngine();
+  const bestMove = useEngineStore((state) => state.bestMove);
+  const variations = useEngineStore((state) => state.variations);
 
   useEffect(() => {
     const botMove = orientation === 'white' ? 'b' : 'w';
 
     if (practiceEnabled && game.turn() === botMove && bestMove) {
+      // const { variation } = getRandomFromArray(evaluation.variations);
+      // const firstMove = variation[0];
+
       move(bestMove.from, bestMove.to);
+      //move(firstMove.slice(0, 2), firstMove.slice(2));
     }
   }, [bestMove, practiceEnabled, game, orientation]);
 
   useEffect(() => {
     const botMove = orientation === 'white' ? 'b' : 'w';
-    if (practiceEnabled && game.turn() === botMove) {
-      findBestMove(game.history({ verbose: true }));
-    }
-  }, [practiceEnabled, currentMove, game, orientation]);
 
-  // useEffect(() => {
-  //   if (practiceEnabled) {
-  //     if (game.turn() === 'b') {
-  //       const bestMoves = parseExplorerMoves(explorerMoves.moves.slice(0, 5));
-  //       const randMove = getRandomFromArray(bestMoves);
-  //       move(randMove.from, randMove.to);
-  //     } else {
-  //       const bestMoves = parseExplorerMoves(explorerMoves.moves.slice(0, 3));
-  //       const history = game.history({ verbose: true });
-  //       const lastMove = history[history.length - 1];
-  //     }
-  //   }
-  // }, [practiceEnabled, explorerMoves]);
+    if (practiceEnabled && game.turn() === botMove) {
+      evaluate(game.history({ verbose: true }));
+    }
+  }, [practiceEnabled, currentMove, game]);
 
   return (
     <Root {...styles}>

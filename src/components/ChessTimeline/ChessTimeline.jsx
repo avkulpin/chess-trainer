@@ -1,9 +1,6 @@
 import { useRef, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { Typography } from '../Typography/Typography';
-import { ButtonVariant } from '../Button/Button';
-import { IconButton } from '../Button/IconButton';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { SavedFolder } from './DynamicSaveDropdown';
 import { useTimeMachineStore } from '../../store/timeMachine';
 import { useMovesExplorer } from '../../queries/useMovesExplorer';
@@ -131,20 +128,12 @@ const NotationLine = ({
   );
 };
 
-const NotationLineRoot = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  height: 20px;
-`;
-
 const Root = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
   background-color: var(--background-panel-color);
-  flex-grow: 1;
 `;
 
 const Header = styled.div`
@@ -159,9 +148,11 @@ const Header = styled.div`
 `;
 
 const Body = styled.div`
+  position: relative;
   display: flex;
   flex-grow: 1;
-  height: 100%;
+  height: 320px;
+  overflow: scroll;
   flex-wrap: wrap;
 `;
 
@@ -202,6 +193,18 @@ const GameNotationOverlay = styled.div`
   flex-grow: 1;
   align-items: center;
   justify-content: center;
+
+  &::before {
+    content: '';
+    background: url('/icons/logo.svg') no-repeat 50% 50%;
+    opacity: 0.02;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: blur(1px);
+  }
 `;
 
 const GameNotation = styled(Typography)`
@@ -225,10 +228,10 @@ const MoveNotationRoot = styled.div`
 const NotationGridLine = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 10px 50px 50px;
+  grid-template-columns: 5px 50px 50px;
   grid-column-gap: 15px;
   height: 40px;
-  padding: 10px;
+  padding: 0 15px;
 `;
 
 const MoveNotationIndex = styled.div`
