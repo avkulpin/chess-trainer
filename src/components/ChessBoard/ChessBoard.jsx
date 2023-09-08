@@ -35,13 +35,13 @@ export const ChessBoard = () => {
     [currentMove],
   );
 
-  const styles = useMemo(
-    () => ({
-      width: `${Math.min(width, height) - 40}px`,
-      height: `${Math.min(width, height) - 40}px`,
-    }),
-    [width, height],
-  );
+  // const styles = useMemo(
+  //   () => ({
+  //     width: `${Math.min(width, height) - 40}px`,
+  //     height: `${Math.min(width, height) - 40}px`,
+  //   }),
+  //   [width, height],
+  // );
 
   useKeyInput([
     ['Escape', () => void reset()],
@@ -96,7 +96,7 @@ export const ChessBoard = () => {
   }, [practiceEnabled, currentMove, game]);
 
   return (
-    <Root {...styles}>
+    <Root>
       <ChessDisplay
         fen={fen}
         game={mainGame}
@@ -104,7 +104,6 @@ export const ChessBoard = () => {
         lastMove={lastMove}
         drawable={drawable}
         onMove={handleMove}
-        styles={styles}
       />
     </Root>
   );
@@ -112,6 +111,7 @@ export const ChessBoard = () => {
 
 const Root = styled.div`
   display: flex;
-  width: ${({ width }) => `${width}px`};
-  height: ${({ height }) => `${height}px`};
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
 `;
