@@ -219,6 +219,7 @@ const MoveNotationRoot = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 10px 0;
 
   & > :nth-child(even) {
     background-color: var(--background-light-panel-color) !important;

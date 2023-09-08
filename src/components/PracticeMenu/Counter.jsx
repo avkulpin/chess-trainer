@@ -87,4 +87,6 @@ const ScrollerRoot = styled.div`
   transform: ${({ scrollBy = 0 }) => `translateY(${scrollBy}px)`};
 `;
 
-const ScrollerSpan = styled.span``;
+const ScrollerSpan = styled.span`
+  transition: 1000ms color ease;
+`;

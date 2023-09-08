@@ -3,18 +3,16 @@ import styled from 'styled-components';
 import { IconButton } from '../Button/IconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { ButtonVariant } from '../Button/Button';
-import { useEngine } from '../../hooks/useEngine';
 import { useGameStore } from '../../store/game';
 import { usePracticeStore } from '../../store/practice';
 import { useEngineStore } from '../../store/engine';
 import { Counter } from './Counter';
 
 export const PracticeMenu = () => {
-  const history = useGameStore((state) => state.history);
   const practiceEnabled = usePracticeStore((state) => state.enabled);
   const startPractice = usePracticeStore((state) => state.startPractice);
   const stopPractice = usePracticeStore((state) => state.stopPractice);
-  const disabled = useMemo(() => !history.length, [history]);
+  const disabled = useMemo(() => false, []);
 
   return (
     <Root>
@@ -55,7 +53,21 @@ export const PracticeMenu = () => {
 };
 
 const EngineInfo = () => {
-  const score = useEngineStore((state) => state.score);
+  const orientation = useGameStore((state) => state.orientation);
+  const evaluation = useEngineStore((state) => state.evaluation);
+  const work = useEngineStore((state) => state.work);
+
+  let score = evaluation?.cp;
+  console.log(work?.turn);
+
+  if (
+    (orientation === 'white' && work?.turn === 'b') ||
+    (orientation === 'black' && work?.turn === 'w')
+  ) {
+    score *= -1;
+  }
+
+  console.log(score);
 
   return <Counter value={score} />;
 };

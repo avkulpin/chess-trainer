@@ -1,18 +1,30 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { shallow } from 'zustand/shallow';
+import { stockfishEngine } from '../services/stockfish/stockfish';
 
 export const engineStore = create(
   subscribeWithSelector((set, get) => ({
     bestMove: null,
-    variations: [],
-    score: 0.0,
-    setEvaluation(evaluation) {
-      console.log(Math.min(...evaluation?.variations.map((item) => item.cp)));
+    work: null,
+    evaluation: null,
+    updateEvaluation(evaluation) {
+      const update = {};
+
+      if (evaluation.evaluation) {
+        update.evaluation = evaluation.evaluation;
+      }
+
+      if (evaluation.bestMove) {
+        update.bestMove = evaluation.bestMove;
+      }
+
+      if (evaluation.work) {
+        update.work = evaluation.work;
+      }
+
       set({
-        bestMove: evaluation?.bestMove,
-        variations: evaluation?.variations,
-        score: Math.min(...evaluation?.variations.map((item) => item.cp)) * -1,
+        ...update,
       });
     },
   })),

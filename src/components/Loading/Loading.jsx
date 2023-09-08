@@ -22,7 +22,7 @@ export const Loading = () => {
     <Root>
       <LogoGroup>
         <Image src="/icons/logo.svg" alt="Chess Logo" width={75} height={75} />
-        <Typography weight={200}>rookie.li</Typography>
+        <Typography weight={200}>rook.li</Typography>
       </LogoGroup>
     </Root>
   );
@@ -43,7 +43,7 @@ const Root = styled.div`
 
 const Glow = keyframes`
   0% {
-    opacity: 0.2;
+    opacity: 0.3;
     transform: translateY(15px);
     filter: drop-shadow(0px 0px 30px rgba(255, 255, 255, 0.5));
   }

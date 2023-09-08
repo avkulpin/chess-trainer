@@ -84,17 +84,14 @@ export const ChessBoard = () => {
     if (practiceEnabled && game.turn() === botMove && bestMove) {
       // const { variation } = getRandomFromArray(evaluation.variations);
       // const firstMove = variation[0];
-
       move(bestMove.from, bestMove.to);
       //move(firstMove.slice(0, 2), firstMove.slice(2));
     }
   }, [bestMove, practiceEnabled, game, orientation]);
 
   useEffect(() => {
-    const botMove = orientation === 'white' ? 'b' : 'w';
-
-    if (practiceEnabled && game.turn() === botMove) {
-      evaluate(game.history({ verbose: true }));
+    if (game.history().length !== 0) {
+      evaluate(game);
     }
   }, [practiceEnabled, currentMove, game]);
 
