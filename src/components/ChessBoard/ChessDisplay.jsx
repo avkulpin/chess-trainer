@@ -54,8 +54,8 @@ export const ChessDisplay = ({
   useEffect(() => {
     chessGround?.current?.set({
       fen,
-      width: styles.width,
-      height: styles.height,
+      // width: styles.width,
+      // height: styles.height,
       movable,
       events,
       drawable: {
