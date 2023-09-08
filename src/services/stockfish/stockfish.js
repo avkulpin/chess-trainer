@@ -11,7 +11,7 @@ class StockfishEngine {
     this.depth = depth;
     this.level = level;
     this.multiVp = multiPv;
-    this._minDepth = 6;
+    this._minDepth = 10;
     this._hashSize = 256;
     this._threads = 8;
     this._isRunning = false;
@@ -28,7 +28,6 @@ class StockfishEngine {
     this.engine.postMessage(`setoption name Skill Level value ${this.level}`);
     this.engine.postMessage('isready');
     this.engine.postMessage('ucinewgame');
-    this.engine.addMessageListener(() => {});
     this.engine.addMessageListener(this.handleNewMessage.bind(this));
 
     return true;

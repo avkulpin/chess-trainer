@@ -7,6 +7,7 @@ import { useGameStore } from '../../store/game';
 import { usePracticeStore } from '../../store/practice';
 import { useEngineStore } from '../../store/engine';
 import { Counter } from './Counter';
+import { Typography } from '../Typography/Typography';
 
 export const PracticeMenu = () => {
   const practiceEnabled = usePracticeStore((state) => state.enabled);
@@ -52,24 +53,40 @@ export const PracticeMenu = () => {
   );
 };
 
+const getCurrentUserTurn = (orientation, turn) => {
+  const map = {
+    white: 'w',
+    black: 'b',
+  };
+
+  return map[orientation] === turn;
+};
+
 const EngineInfo = () => {
+  const currentMove = useGameStore((state) => state.currentMove);
   const orientation = useGameStore((state) => state.orientation);
   const evaluation = useEngineStore((state) => state.evaluation);
   const work = useEngineStore((state) => state.work);
+  const bestMove = useEngineStore((state) => state.bestMove);
 
   let score = evaluation?.cp;
-  console.log(work?.turn);
+  const userTurn = getCurrentUserTurn(orientation, work?.turn);
 
-  if (
-    (orientation === 'white' && work?.turn === 'b') ||
-    (orientation === 'black' && work?.turn === 'w')
-  ) {
+  if (!userTurn) {
     score *= -1;
   }
 
-  console.log(score);
-
-  return <Counter value={score} />;
+  return (
+    <Info>
+      {currentMove?.lan === `${bestMove?.from}${bestMove?.to}` && !userTurn ? (
+        <Typography size={12} color="#599a11">
+          Found the best move
+        </Typography>
+      ) : (
+        <Counter value={score} />
+      )}
+    </Info>
+  );
 };
 
 const Root = styled.div`
@@ -81,4 +98,9 @@ const Root = styled.div`
   height: 100px;
   border-radius: var(--border-radius-sm);
   background-color: var(--background-panel-color);
+`;
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
