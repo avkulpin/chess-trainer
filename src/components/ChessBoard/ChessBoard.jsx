@@ -1,7 +1,6 @@
 'use client';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { useWindowSize } from 'react-use';
 import { ChessDisplay } from './ChessDisplay';
 import { useMovesExplorer } from '../../queries/useMovesExplorer';
 import { useTimeMachineStore } from '../../store/timeMachine';
@@ -14,7 +13,6 @@ import { mapMovesToAutoShapes } from './utils';
 import { useEngineStore } from '../../store/engine';
 
 export const ChessBoard = () => {
-  const { width, height } = useWindowSize();
   const game = useGameStore((state) => state.game);
   const orientation = useGameStore((state) => state.orientation);
   const practiceEnabled = usePracticeStore((state) => state.enabled);
@@ -34,14 +32,6 @@ export const ChessBoard = () => {
     () => (currentMove ? [currentMove?.from, currentMove?.to] : null),
     [currentMove],
   );
-
-  // const styles = useMemo(
-  //   () => ({
-  //     width: `${Math.min(width, height) - 40}px`,
-  //     height: `${Math.min(width, height) - 40}px`,
-  //   }),
-  //   [width, height],
-  // );
 
   useKeyInput([
     ['Escape', () => void reset()],

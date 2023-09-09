@@ -12,6 +12,7 @@ export const ButtonVariant = {
 export const ButtonSize = {
   MEDIUM: 'MEDIUM',
   SMALL: 'SMALL',
+  LARGE: 'LARGE',
 };
 
 export const Button = ({
@@ -145,6 +146,12 @@ const Root = styled.div`
     size === ButtonSize.SMALL &&
     css`
       height: var(--button-size-small);
+    `}
+
+  ${({ size }) =>
+    size === ButtonSize.LARGE &&
+    css`
+      height: var(--button-size-large);
     `}
 
   /**

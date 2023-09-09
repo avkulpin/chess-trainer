@@ -2,12 +2,11 @@ import { useMemo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IconButton } from '../Button/IconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { ButtonVariant } from '../Button/Button';
+import { ButtonVariant, ButtonSize } from '../Button/Button';
 import { useGameStore } from '../../store/game';
 import { usePracticeStore } from '../../store/practice';
 import { useEngineStore } from '../../store/engine';
 import { Counter } from './Counter';
-import { Typography } from '../Typography/Typography';
 
 export const PracticeMenu = () => {
   const practiceEnabled = usePracticeStore((state) => state.enabled);
@@ -36,6 +35,7 @@ export const PracticeMenu = () => {
               src="/icons/run.svg"
               disabled={disabled}
               variant={ButtonVariant.SECONDARY}
+              size={ButtonSize.LARGE}
               onClick={startPractice}
             />
           </Tooltip>
@@ -44,6 +44,7 @@ export const PracticeMenu = () => {
               src="/icons/robot.svg"
               disabled={disabled}
               variant={ButtonVariant.SECONDARY}
+              size={ButtonSize.LARGE}
               onClick={startPractice}
             />
           </Tooltip>
@@ -73,20 +74,22 @@ const EngineInfo = () => {
   const userTurn = getCurrentUserTurn(orientation, work?.turn);
 
   if (!userTurn) {
-    score *= -1;
+    score = score ? score * -1 : 0;
   }
 
-  return (
-    <Info>
-      {currentMove?.lan === `${bestMove?.from}${bestMove?.to}` && !userTurn ? (
-        <Typography size={12} color="#599a11">
-          Found the best move
-        </Typography>
-      ) : (
-        <Counter value={score} />
-      )}
-    </Info>
-  );
+  return <Counter value={score} />;
+
+  // return (
+  //   <Info>
+  //     {currentMove?.lan === `${bestMove?.from}${bestMove?.to}` && !userTurn ? (
+  //       <Typography size={12} color="#599a11">
+  //         Found the best move
+  //       </Typography>
+  //     ) : (
+  //       <Counter value={score} />
+  //     )}
+  //   </Info>
+  // );
 };
 
 const Root = styled.div`

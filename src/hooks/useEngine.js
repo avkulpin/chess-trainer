@@ -6,7 +6,7 @@ import { stockfishEngine } from '../services/stockfish/stockfish';
 
 export const useEngine = () => {
   const updateEvaluation = useEngineStore((state) => state.updateEvaluation);
-  const throttleUpdate = useCallback(debounce(updateEvaluation, 100), []);
+  const debounceUpdate = useCallback(debounce(updateEvaluation, 100), []);
 
   const { data: isReady } = useQuery(['engine'], () => stockfishEngine.init(), {
     refetchOnMount: false,
@@ -26,7 +26,7 @@ export const useEngine = () => {
           fen: game.fen(),
           turn: game.turn(),
         },
-        throttleUpdate,
+        debounceUpdate,
       );
     },
   };
