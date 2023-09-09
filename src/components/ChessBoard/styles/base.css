@@ -176,3 +176,7 @@ piece.fading {
 .cg-wrap coords.ranks coord {
   transform: translateY(39%);
 }
+
+.cg-custom-svgs #svg-wrapper > * {
+  transform: translate(-50%, -50%);
+}
