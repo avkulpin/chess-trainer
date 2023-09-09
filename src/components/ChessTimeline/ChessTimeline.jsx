@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Typography } from '../Typography/Typography';
 import { SavedFolder } from './DynamicSaveDropdown';
@@ -42,6 +42,7 @@ export const ChessTimeline = () => {
 };
 
 const MovesNotation = () => {
+  const scrollBeacon = useRef(null);
   const game = useGameStore((state) => state.game);
   const history = useGameStore((state) => state.history);
   const cursorIndex = useTimeMachineStore((state) => state.cursorIndex);
@@ -52,6 +53,12 @@ const MovesNotation = () => {
   }, [history]);
 
   const { data: explorerMoves } = useMovesExplorer(game.fen());
+
+  useEffect(() => {
+    if (scrollBeacon.current) {
+      scrollBeacon.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [history]);
 
   if (!history.length) {
     return null;
@@ -92,6 +99,7 @@ const MovesNotation = () => {
       {/*>*/}
       {/*  <IconButton src="/icons/save.svg" variant={ButtonVariant.SECONDARY} />*/}
       {/*</Tooltip>*/}
+      <div ref={scrollBeacon} />
     </MoveNotationRoot>
   );
 };
