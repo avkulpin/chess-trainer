@@ -142,6 +142,7 @@ const Root = styled.div`
   flex-direction: column;
   border-radius: 8px;
   background-color: var(--background-panel-color);
+  flex-grow: 1;
 `;
 
 const Header = styled.div`
@@ -160,8 +161,12 @@ const Body = styled.div`
   display: flex;
   flex-grow: 1;
   height: 320px;
-  overflow: scroll;
+  overflow-y: scroll;
   flex-wrap: wrap;
+
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
 `;
 
 const Notation = styled.div`

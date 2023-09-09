@@ -13,12 +13,9 @@ export default function Home() {
   return (
     <QueryClientProvider client={queryClient}>
       <Root>
-        <Loading />
-
         <MainBoard>
           <ChessBoard />
         </MainBoard>
-
         <SidePanel>
           <SidePanelInner>
             <ChessTimeline />
@@ -33,9 +30,9 @@ export default function Home() {
 
 const Root = styled.div`
   display: flex;
-  padding: 20px;
+  padding-top: 20px;
   gap: 20px;
-  align-items: start;
+  align-items: stretch;
   justify-content: center;
 
   @media (max-width: 970px) {
@@ -47,6 +44,8 @@ const MainBoard = styled.div`
   display: flex;
   flex-shrink: 1;
   flex-grow: 1;
+  max-height: 100vh;
+  overflow: hidden;
   max-width: calc(100vh - 50px);
 `;
 
