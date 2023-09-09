@@ -22,7 +22,7 @@ export const Loading = () => {
     <Root>
       <LogoGroup>
         <Image src="/icons/logo.svg" alt="Chess Logo" width={75} height={75} />
-        <Typography weight={200}>rook.li</Typography>
+        <Typography weight={200}>rooky.io</Typography>
       </LogoGroup>
     </Root>
   );
